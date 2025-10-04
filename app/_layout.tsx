@@ -1,24 +1,33 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import { SplashScreen, Stack } from 'expo-router';
+import { Provider } from "react-redux";
+import { useAppSelector } from '@/src/hooks';
+import store, { RootState } from '@/src/store';
+import { startAppInit } from '@/src/feature/app/appSlice';
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
+SplashScreen.preventAutoHideAsync();
+store.dispatch(startAppInit());
 
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
+export default function Root() {
+  return (
+    <Provider store={store}>
+      <RootNavigator />
+    </Provider>
+  );
+}
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
+function RootNavigator() {
+  const { authState } = useAppSelector((state: RootState) => state.auth);
+
+  console.log('RootNavigator authState', authState);
+  if (authState !== 'authenticated') {
+    return null;
+  }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <Stack>
+      <Stack.Protected guard={authState !== 'authenticated'}>
+        <Stack.Screen name="(app)" />
+      </Stack.Protected>
+    </Stack>
   );
 }

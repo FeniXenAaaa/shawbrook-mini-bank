@@ -1,0 +1,9 @@
+{
+  "platforms": ["apple", "android"],
+  "apple": {
+    "modules": ["AuthenticationModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.shawbrookmoduleauthentication.AuthenticationModule"]
+  }
+}

@@ -41,3 +41,7 @@ app-example
 # generated native folders
 /ios
 /android
+modules/@shawbrook/kotlin-secure-core/build/*
+modules/@shawbrook/module-authentication/android/build/*
+.idea
+
