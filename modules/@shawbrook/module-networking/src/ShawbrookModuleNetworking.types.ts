@@ -10,4 +10,5 @@ export interface IShawbrookAccount {
 export type ShawbrookModuleNetworkingModuleEvents = {
   getAccounts: () => IShawbrookAccount[];
   getAccount: (id: string) => IShawbrookAccount;
+  sendChatMessage: (message: string) => Promise<string>;
 };

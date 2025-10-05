@@ -1,11 +1,6 @@
-import { NativeModule, requireNativeModule } from 'expo';
+import { requireNativeModule } from 'expo';
+import { ShawbrookModuleNetworkingModuleEvents } from './ShawbrookModuleNetworking.types';
 
-import { IShawbrookAccount, ShawbrookModuleNetworkingModuleEvents } from './ShawbrookModuleNetworking.types';
-
-declare class ShawbrookModuleNetworkingModule extends NativeModule<ShawbrookModuleNetworkingModuleEvents> {
-  getAccounts(): Promise<IShawbrookAccount[]>;
-  getAccount(id: string): Promise<IShawbrookAccount>
-}
-
-// This call loads the native module object from the JSI.
-export default requireNativeModule<ShawbrookModuleNetworkingModule>('ShawbrookModuleNetworking');
+export default requireNativeModule<ShawbrookModuleNetworkingModuleEvents>(
+  'ShawbrookModuleNetworking'
+);

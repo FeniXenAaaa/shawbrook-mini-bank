@@ -43,5 +43,8 @@ android {
   dependencies {
     implementation("io.insert-koin:koin-android:4.0.4")
     implementation project(":kotlin-secure-core")
+    implementation platform('com.google.firebase:firebase-bom:32.2.2')
+    implementation 'com.google.firebase:firebase-functions-ktx'
+    implementation 'com.google.firebase:firebase-auth-ktx'
   }
 }

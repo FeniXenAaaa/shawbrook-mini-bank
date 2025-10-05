@@ -42,6 +42,26 @@ class ShawbrookModuleNetworkingModule : Module(), KoinComponent {
                 "balance" to account.balance
             )
         }
+
+        AsyncFunction("sendChatMessage") { message: String ->
+            ensureAuthenticated()
+            if (message.isBlank()) throw Exception("Message cannot be empty")
+
+            "AI: Mock response to \"$message\""
+
+/*            try {
+                val result = functions
+                    .getHttpsCallable("chatWithAI")
+                    .call(mapOf("message" to message))
+                    .await()
+
+                val data = result.data as? Map<*, *>
+                val reply = data?.get("reply") as? String
+                reply ?: throw Exception("No reply from AI")
+            } catch (e: Exception) {
+                throw Exception("Failed to get AI response: ${e.message}", e)
+            }*/
+        }
     }
 
     private fun ensureAuthenticated() {
