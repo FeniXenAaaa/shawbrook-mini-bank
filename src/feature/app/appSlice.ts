@@ -2,20 +2,26 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { initAuthListener } from '@/src/feature/auth/authSlice';
 import { authenticate } from '@/modules/@shawbrook/module-authentication';
 import * as SplashScreen from 'expo-splash-screen';
+import { Appearance } from "react-native";
+import { store } from "@/src/store";
+import { updateSystemTheme, loadTheme } from "@/src/feature/theme/themeSlice";
 
 export const startAppInit = createAsyncThunk(
   "app/init",
-  async (args, { dispatch }) => {
+  async (_, { dispatch }) => {
     try {
       dispatch(setAppInitState("pending"));
-      console.log("console.log(dispatch(setAppInitState(\"pending\"));)")
+      await dispatch(loadTheme());
       dispatch(initAuthListener());
+
+      Appearance.addChangeListener(({ colorScheme }) => {
+        if (colorScheme) {
+          store.dispatch(updateSystemTheme(colorScheme === "dark" ? "dark" : "light"));
+        }
+      });
 
       await authenticate();
       SplashScreen.hide();
-
-      //TODO: Get pre-load non-sensitive data
-      //eg.: home page promotions, user settings, etc.
 
       dispatch(setAppInitState("success"));
     } catch (e) {
@@ -29,9 +35,9 @@ interface IApp {
   initState: "idle" | "pending" | "success" | "error";
 }
 
-const initialState = {
+const initialState: IApp = {
   initState: "idle",
-} as IApp;
+};
 
 export const appSlice = createSlice({
   name: "app",
@@ -40,7 +46,7 @@ export const appSlice = createSlice({
     setAppInitState: (state, action: PayloadAction<IApp["initState"]>) => {
       state.initState = action.payload;
     },
-  }
+  },
 });
 
 export const { setAppInitState } = appSlice.actions;

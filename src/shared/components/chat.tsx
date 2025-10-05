@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import ShawbrookModuleNetworking from "@/modules/@shawbrook/module-networking";
+import { useTheme } from '@react-navigation/native';
 
 export default function Chat() {
   const [messages, setMessages] = useState<string[]>([]);
@@ -19,6 +20,7 @@ export default function Chat() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const scrollRef = useRef<ScrollView>(null);
+  const { colors } = useTheme();
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -62,12 +64,12 @@ export default function Chat() {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={Platform.OS === "ios" ? 50 : 0}
       >
-        <View style={styles.modal}>
+        <View style={[styles.modal, { backgroundColor: colors.background }]}>
           <Pressable onPress={() => router.back()} style={styles.closeButton}>
-            <Text style={styles.closeText}>✕</Text>
+            <Text style={[styles.closeText, { color: colors.text }]}>✕</Text>
           </Pressable>
 
-          <Text style={styles.title}>AI Chat</Text>
+          <Text style={[styles.title, { color: colors.text }]}>AI Chat</Text>
 
           <ScrollView
             style={styles.messages}
@@ -75,19 +77,20 @@ export default function Chat() {
             contentContainerStyle={styles.messagesContainer}
           >
             {messages.map((msg, i) => (
-              <Text key={i} style={styles.message}>
+              <Text key={i} style={[styles.message, { color: colors.text }]}>
                 {msg}
               </Text>
             ))}
-            {loading && <Text style={styles.message}>AI is typing...</Text>}
+            {loading && <Text style={[styles.message, { color: colors.text }]}>AI is typing...</Text>}
           </ScrollView>
 
-          <View style={styles.inputWrapper}>
+          <View style={[styles.inputWrapper, { borderColor: colors.border || '#ccc' }]}>
             <TextInput
               value={input}
               onChangeText={setInput}
               placeholder="Type your message..."
-              style={styles.input}
+              placeholderTextColor={colors.text}
+              style={[styles.input, { borderColor: colors.border || '#ccc', color: colors.text, backgroundColor: colors.card }]}
               editable={!loading}
             />
             <Pressable
@@ -107,7 +110,6 @@ export default function Chat() {
 const styles = StyleSheet.create({
   modal: {
     flex: 1,
-    backgroundColor: "#fff",
     paddingTop: Platform.OS === "ios" ? 50 : 20,
     paddingHorizontal: 16,
   },
@@ -141,13 +143,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     borderTopWidth: 1,
-    borderColor: "#ccc",
     paddingVertical: 8,
   },
   input: {
     flex: 1,
     borderWidth: 1,
-    borderColor: "#ccc",
     borderRadius: 8,
     padding: 8,
     marginRight: 8,
