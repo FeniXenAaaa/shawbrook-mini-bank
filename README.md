@@ -1,50 +1,59 @@
-# Welcome to your Expo app 👋
+# Welcome to Shawbrook Mini Banking App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Features
 
-## Get started
+1. **Biometric Authentication**  
+   On app launch, the system checks for an existing token in secure storage. If a token exists, the app requests biometric authentication. After 3 unsuccessful attempts, it falls back to a hardcoded PIN code.  
+   If no token is present, the login form is displayed (Firebase authentication).
 
-1. Install dependencies
+2. **Dashboard with Account List**
+  - Account name (e.g., "Savings")
+  - Account number
+  - Balance
 
-   ```bash
-   npm install
-   ```
+3. **Account Details Page**
 
-2. Start the app
+4. **Chat Widget on Each Page**  
+   Chat communication is handled by a native Networking Module. It sends messages to a Firebase Function for input sanitization, then forwards them to Gen Kit.  
+   Chat history is stored in memory on the native side.
 
-   ```bash
-   npx expo start
-   ```
+5. **Theme Support**  
+   Dark and light modes can be switched from the side menu.
 
-In the output, you'll find options to open the app in a
+6. **Code Quality**  
+   ESLint and Prettier are configured for consistent coding standards.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Native Modules
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### Secure Core
 
-## Get a fresh project
+A native-only module that underpins all sensitive operations.  
+It tracks the current authentication state and ensures secure handling of sensitive data.
 
-When you're ready, run:
+### Authentication Module
 
-```bash
-npm run reset-project
-```
+Responsible for displaying the PIN Entry screen, login form, and biometric prompts.  
+All sensitive operations are executed within this module, without JavaScript involvement.
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### Networking Module
 
-## Learn more
+Handles all network requests.  
+It verifies the Secure Core authentication state before performing any network operations.
 
-To learn more about developing your project with Expo, look at the following resources:
+### Things to improve
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Things that are good to implement but too big in scope of this demo:
+1. AI Chat should be using Sockets for real-time LLM answers
+2. Firebase endppints and keys should be taken from .env during build
+3. Some components (for example, drawer) could be moved to own folders or split better
+4. AsyncStorage access (for example, to get latest Theme settings) should be routed through custom Storage Module
 
-## Join the community
+## Diagrams
 
-Join our community of developers creating universal apps.
+HLD:
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+![HLD](https://res.cloudinary.com/dst53uohh/image/upload/v1759701193/hld.drawio_o39fcp.png "HLD")
+
+LLD:
+
+![LLD](https://res.cloudinary.com/dst53uohh/image/upload/v1759701193/lld.drawio_pdy7v3.png "LLD")
