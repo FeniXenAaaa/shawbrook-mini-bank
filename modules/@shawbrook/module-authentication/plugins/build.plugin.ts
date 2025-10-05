@@ -17,20 +17,20 @@ const withAppBuildGradleDependencies: ConfigPlugin = (config) => {
       const lines = contents.split("\n");
 
       const targetIndex = lines.findIndex((line) =>
-        line.trim().startsWith(TARGET_LINE)
+        line.trim().startsWith(TARGET_LINE),
       );
 
       if (targetIndex !== -1) {
         // Filter out already present dependencies
         const toInsert = DEPENDENCIES_TO_ADD.filter(
-          (dep) => !contents.includes(dep)
+          (dep) => !contents.includes(dep),
         );
 
         if (toInsert.length > 0) {
           lines.splice(
             targetIndex + 1,
             0,
-            ...toInsert.map((dep) => `    ${dep}`)
+            ...toInsert.map((dep) => `    ${dep}`),
           );
           contents = lines.join("\n");
         }

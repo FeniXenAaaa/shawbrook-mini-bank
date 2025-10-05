@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { initAuthListener } from '@/src/feature/auth/authSlice';
-import { authenticate } from '@/modules/@shawbrook/module-authentication';
-import * as SplashScreen from 'expo-splash-screen';
+import { initAuthListener } from "@/src/feature/auth/authSlice";
+import { authenticate } from "@/modules/@shawbrook/module-authentication";
+import * as SplashScreen from "expo-splash-screen";
 import { Appearance } from "react-native";
 import { store } from "@/src/store";
 import { updateSystemTheme, loadTheme } from "@/src/feature/theme/themeSlice";
@@ -16,7 +16,9 @@ export const startAppInit = createAsyncThunk(
 
       Appearance.addChangeListener(({ colorScheme }) => {
         if (colorScheme) {
-          store.dispatch(updateSystemTheme(colorScheme === "dark" ? "dark" : "light"));
+          store.dispatch(
+            updateSystemTheme(colorScheme === "dark" ? "dark" : "light"),
+          );
         }
       });
 
@@ -28,7 +30,7 @@ export const startAppInit = createAsyncThunk(
       console.error("App init error. ", e);
       dispatch(setAppInitState("error"));
     }
-  }
+  },
 );
 
 interface IApp {

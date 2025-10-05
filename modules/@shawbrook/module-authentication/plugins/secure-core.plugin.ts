@@ -9,7 +9,7 @@ const withLocalAndroidProject: ConfigPlugin = (config) => {
       const settingsGradlePath = path.join(
         config.modRequest.projectRoot,
         "android",
-        "settings.gradle"
+        "settings.gradle",
       );
       const localProjectInclude = `
 include(":kotlin-secure-core")

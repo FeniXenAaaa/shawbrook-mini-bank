@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback } from "react";
 
 //Small wrapper around async calls (could be more advance ofc)
 //Usually, something like RTK Query is used

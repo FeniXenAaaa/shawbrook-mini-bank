@@ -20,7 +20,7 @@ const withAuthenticationActivity: ConfigPlugin = (config) => {
     const activityAlreadyExists = existingActivities.some(
       (activity: any) =>
         activity.$?.["android:name"] ===
-        "expo.modules.shawbrookmoduleauthentication.AuthenticationActivity"
+        "expo.modules.shawbrookmoduleauthentication.AuthenticationActivity",
     );
 
     if (!activityAlreadyExists) {
@@ -28,7 +28,8 @@ const withAuthenticationActivity: ConfigPlugin = (config) => {
         ...existingActivities,
         {
           $: {
-            "android:name": "expo.modules.shawbrookmoduleauthentication.AuthenticationActivity",
+            "android:name":
+              "expo.modules.shawbrookmoduleauthentication.AuthenticationActivity",
           },
         },
       ];

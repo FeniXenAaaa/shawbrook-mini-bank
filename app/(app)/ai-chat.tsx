@@ -1,5 +1,5 @@
-import Chat from '@/src/shared/components/chat';
+import Chat from "@/src/shared/components/chat";
 
 export default function AIChat() {
-  return <Chat />
+  return <Chat />;
 }

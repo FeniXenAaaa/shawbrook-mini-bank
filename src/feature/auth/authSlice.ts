@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { addAuthenticationListener } from '@/modules/@shawbrook/module-authentication';
+import { addAuthenticationListener } from "@/modules/@shawbrook/module-authentication";
 
 interface IAuth {
   authState: "none" | "authenticated" | "expired";
@@ -14,13 +14,13 @@ export const initAuthListener = createAsyncThunk(
   async (args, { dispatch }) => {
     try {
       addAuthenticationListener(({ authenticationState }) => {
-        console.log("addAuthenticationListener", authenticationState)
+        console.log("addAuthenticationListener", authenticationState);
         dispatch(setAuthState(authenticationState));
       });
     } catch (e) {
       console.log(`Error in addAuthListener`, e);
     }
-  }
+  },
 );
 
 export const authSlice = createSlice({
@@ -30,7 +30,7 @@ export const authSlice = createSlice({
     setAuthState: (state, action: PayloadAction<IAuth["authState"]>) => {
       state.authState = action.payload;
     },
-  }
+  },
 });
 
 export const { setAuthState } = authSlice.actions;

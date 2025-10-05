@@ -1,21 +1,22 @@
-import { TouchableOpacity, StyleSheet, Text } from 'react-native';
-import { useRouter } from 'expo-router';
+import { TouchableOpacity, StyleSheet, Text } from "react-native";
+import { useRouter } from "expo-router";
 
 export default function ChatFloatingButton() {
   const router = useRouter();
 
-  return (<TouchableOpacity
-    style={styles.floatingButton}
-    onPress={() =>
-      router.push({
-        pathname: "/(app)/ai-chat",
-      })
-    }
-  >
-    <Text style={styles.floatingButtonText}>💬</Text>
-  </TouchableOpacity>)
+  return (
+    <TouchableOpacity
+      style={styles.floatingButton}
+      onPress={() =>
+        router.push({
+          pathname: "/(app)/ai-chat",
+        })
+      }
+    >
+      <Text style={styles.floatingButtonText}>💬</Text>
+    </TouchableOpacity>
+  );
 }
-
 
 const styles = StyleSheet.create({
   floatingButton: {

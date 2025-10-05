@@ -26,7 +26,7 @@ const withMainApplicationKoin: ConfigPlugin = (config) => {
       if (!contents.includes(importLine)) {
         contents = contents.replace(
           /^package .*;\s*/m,
-          (match) => `${match}\n${importLine}`
+          (match) => `${match}\n${importLine}`,
         );
       }
     }

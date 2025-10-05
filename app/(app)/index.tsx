@@ -8,8 +8,8 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import ShawbrookModuleNetworking from "@/modules/@shawbrook/module-networking";
-import ChatFloatingButton from '@/src/shared/components/chat-floating-button';
-import { useTheme } from '@react-navigation/native';
+import ChatFloatingButton from "@/src/shared/components/chat-floating-button";
+import { useTheme } from "@react-navigation/native";
 
 export default function Index() {
   const router = useRouter();
@@ -44,7 +44,9 @@ export default function Index() {
   if (accounts.length === 0) {
     return (
       <View style={[styles.center, { backgroundColor: colors.background }]}>
-        <Text style={[styles.loadingText, { color: colors.text }]}>Loading accounts...</Text>
+        <Text style={[styles.loadingText, { color: colors.text }]}>
+          Loading accounts...
+        </Text>
       </View>
     );
   }
@@ -56,7 +58,10 @@ export default function Index() {
         keyExtractor={(item) => item.number}
         renderItem={({ item }) => (
           <TouchableOpacity
-            style={[styles.card, { backgroundColor: colors.card, borderLeftColor: colors.primary }]}
+            style={[
+              styles.card,
+              { backgroundColor: colors.card, borderLeftColor: colors.primary },
+            ]}
             onPress={() =>
               router.push({
                 pathname: "/(app)/account/[id]",
@@ -66,9 +71,15 @@ export default function Index() {
           >
             <View style={styles.cardContent}>
               <View>
-                <Text style={[styles.name, { color: colors.text }]}>{item.name}</Text>
-                <Text style={[styles.number, { color: colors.text }]}>Account No: {item.number}</Text>
-                <Text style={[styles.balance, { color: colors.text }]}>Balance: £{item.balance}</Text>
+                <Text style={[styles.name, { color: colors.text }]}>
+                  {item.name}
+                </Text>
+                <Text style={[styles.number, { color: colors.text }]}>
+                  Account No: {item.number}
+                </Text>
+                <Text style={[styles.balance, { color: colors.text }]}>
+                  Balance: £{item.balance}
+                </Text>
               </View>
               <Text style={[styles.arrow, { color: colors.primary }]}>›</Text>
             </View>

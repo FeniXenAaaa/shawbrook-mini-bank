@@ -2,7 +2,7 @@ import { useLocalSearchParams } from "expo-router";
 import { View, Text, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
 import ShawbrookModuleNetworking from "@/modules/@shawbrook/module-networking";
-import ChatFloatingButton from '@/src/shared/components/chat-floating-button';
+import ChatFloatingButton from "@/src/shared/components/chat-floating-button";
 
 export default function AccountDetails() {
   const { id } = useLocalSearchParams();
@@ -53,7 +53,7 @@ export default function AccountDetails() {
         <Text style={styles.label}>Balance:</Text>
         <Text style={styles.value}>£{account.balance}</Text>
       </View>
-      <ChatFloatingButton  />
+      <ChatFloatingButton />
     </View>
   );
 }

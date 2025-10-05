@@ -4,6 +4,8 @@
     "modules": ["AuthenticationModule"]
   },
   "android": {
-    "modules": ["expo.modules.shawbrookmoduleauthentication.AuthenticationModule"]
+    "modules": [
+      "expo.modules.shawbrookmoduleauthentication.AuthenticationModule"
+    ]
   }
 }

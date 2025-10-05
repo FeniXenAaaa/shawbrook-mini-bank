@@ -30,7 +30,7 @@ const StacksLayout = () => {
       <Stack.Screen
         name="ai-chat"
         options={{
-          presentation: 'modal',
+          presentation: "modal",
           headerShown: true,
           title: "AI Chat",
         }}

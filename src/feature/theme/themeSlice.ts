@@ -1,7 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Appearance } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { AppDispatch } from "@/src/store";
 
 export type ThemeState = {
   mode: "light" | "dark" | "system";
@@ -10,26 +9,35 @@ export type ThemeState = {
 
 const THEME_KEY = "app_theme";
 
-export const persistTheme = (mode: "light" | "dark" | "system") => async (dispatch: AppDispatch) => {
-  try {
-    await AsyncStorage.setItem(THEME_KEY, mode);
-    dispatch(setMode(mode));
-  } catch (e) {
-    console.error("Failed to persist theme", e);
-  }
-};
-
-export const loadTheme = () => async (dispatch: AppDispatch) => {
-  try {
-    const saved = await AsyncStorage.getItem(THEME_KEY);
-    if (saved === "light" || saved === "dark" || saved === "system") {
-      dispatch(setMode(saved));
+export const loadTheme = createAsyncThunk(
+  "theme/load",
+  async (_, { dispatch }) => {
+    try {
+      const saved = await AsyncStorage.getItem(THEME_KEY);
+      if (saved === "light" || saved === "dark" || saved === "system") {
+        dispatch(setMode(saved));
+      }
+      return saved; // optional: can be used in extraReducers
+    } catch (e) {
+      console.error("Failed to load theme", e);
+      throw e;
     }
-  } catch (e) {
-    console.error("Failed to load theme", e);
-  }
-};
+  },
+);
 
+export const persistTheme = createAsyncThunk(
+  "theme/persist",
+  async (mode: "light" | "dark" | "system", { dispatch }) => {
+    try {
+      await AsyncStorage.setItem(THEME_KEY, mode);
+      dispatch(setMode(mode));
+      return mode; // optional: can be used in extraReducers
+    } catch (e) {
+      console.error("Failed to persist theme", e);
+      throw e;
+    }
+  },
+);
 
 const systemTheme = Appearance.getColorScheme() === "dark" ? "dark" : "light";
 
@@ -45,7 +53,8 @@ export const themeSlice = createSlice({
     setMode(state, action: PayloadAction<"light" | "dark" | "system">) {
       state.mode = action.payload;
       if (state.mode === "system") {
-        state.current = Appearance.getColorScheme() === "dark" ? "dark" : "light";
+        state.current =
+          Appearance.getColorScheme() === "dark" ? "dark" : "light";
       } else {
         state.current = state.mode;
       }

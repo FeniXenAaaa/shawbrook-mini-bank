@@ -11,37 +11,37 @@ module.exports = ({ config }: { config: ExpoConfig }) => ({
   userInterfaceStyle: "automatic",
   newArchEnabled: true,
   ios: {
-    supportsTablet: true
+    supportsTablet: true,
   },
   android: {
     adaptiveIcon: {
       backgroundColor: "#E6F4FE",
       foregroundImage: "./assets/images/android-icon-foreground.png",
       backgroundImage: "./assets/images/android-icon-background.png",
-      monochromeImage: "./assets/images/android-icon-monochrome.png"
+      monochromeImage: "./assets/images/android-icon-monochrome.png",
     },
     edgeToEdgeEnabled: true,
     predictiveBackGestureEnabled: false,
-    package: "com.anonymous.shawbrookminibank"
+    package: "com.anonymous.shawbrookminibank",
   },
   plugins: [
     "expo-router",
     [
       "expo-splash-screen",
       {
-        "image": "./assets/images/splash-icon.png",
-        "imageWidth": 200,
-        "resizeMode": "contain",
-        "backgroundColor": "#ffffff",
-        "dark": {
-          "backgroundColor": "#000000"
-        }
-      }
+        image: "./assets/images/splash-icon.png",
+        imageWidth: 200,
+        resizeMode: "contain",
+        backgroundColor: "#ffffff",
+        dark: {
+          backgroundColor: "#000000",
+        },
+      },
     ],
-    "./modules/@shawbrook/module-authentication/plugins/config.plugin.ts"
+    "./modules/@shawbrook/module-authentication/plugins/config.plugin.ts",
   ],
   experiments: {
-    "typedRoutes": true,
-    "reactCompiler": true
+    typedRoutes: true,
+    reactCompiler: true,
   },
 });

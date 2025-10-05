@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import ShawbrookModuleNetworking from "@/modules/@shawbrook/module-networking";
-import { useTheme } from '@react-navigation/native';
+import { useTheme } from "@react-navigation/native";
 
 export default function Chat() {
   const [messages, setMessages] = useState<string[]>([]);
@@ -81,16 +81,32 @@ export default function Chat() {
                 {msg}
               </Text>
             ))}
-            {loading && <Text style={[styles.message, { color: colors.text }]}>AI is typing...</Text>}
+            {loading && (
+              <Text style={[styles.message, { color: colors.text }]}>
+                AI is typing...
+              </Text>
+            )}
           </ScrollView>
 
-          <View style={[styles.inputWrapper, { borderColor: colors.border || '#ccc' }]}>
+          <View
+            style={[
+              styles.inputWrapper,
+              { borderColor: colors.border || "#ccc" },
+            ]}
+          >
             <TextInput
               value={input}
               onChangeText={setInput}
               placeholder="Type your message..."
               placeholderTextColor={colors.text}
-              style={[styles.input, { borderColor: colors.border || '#ccc', color: colors.text, backgroundColor: colors.card }]}
+              style={[
+                styles.input,
+                {
+                  borderColor: colors.border || "#ccc",
+                  color: colors.text,
+                  backgroundColor: colors.card,
+                },
+              ]}
               editable={!loading}
             />
             <Pressable

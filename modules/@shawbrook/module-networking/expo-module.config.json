@@ -4,6 +4,8 @@
     "modules": ["ShawbrookModuleNetworkingModule"]
   },
   "android": {
-    "modules": ["expo.modules.shawbrookmodulenetworking.ShawbrookModuleNetworkingModule"]
+    "modules": [
+      "expo.modules.shawbrookmodulenetworking.ShawbrookModuleNetworkingModule"
+    ]
   }
 }

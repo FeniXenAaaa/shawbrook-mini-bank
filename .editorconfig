@@ -1,0 +1,13 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf          # Matches Prettier endOfLine: "lf"
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+indent_style = space      # Matches Prettier useTabs: false
+indent_size = 2           # Matches Prettier tabWidth: 2
+
+[*.md]
+trim_trailing_whitespace = false
