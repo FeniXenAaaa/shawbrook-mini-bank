@@ -1,34 +1,32 @@
-import { Drawer } from 'expo-router/drawer';
-import { View, Button } from 'react-native';
-import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
-import AuthenticationModule from '@/modules/@shawbrook/module-authentication/src/AuthenticationModule';
+import React from "react";
+import { Stack, useNavigation } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import { DrawerActions } from "@react-navigation/native";
 
-export default function AppLayout() {
-  const handleSignOut = async () => {
-    await AuthenticationModule.signOut();
-  };
-
+const StacksLayout = () => {
+  const nav = useNavigation();
   return (
-    <Drawer
-      drawerContent={(props) => (
-        <DrawerContentScrollView {...props}>
-          {/* Default drawer items (gestures and navigation preserved) */}
-          <DrawerItemList {...props} />
-
-          {/* Custom Sign Out button */}
-          <View style={{ marginTop: 20, paddingHorizontal: 16 }}>
-            <Button title="Sign Out" onPress={handleSignOut} />
-          </View>
-        </DrawerContentScrollView>
-      )}
-    >
-      <Drawer.Screen
+    <Stack>
+      <Stack.Screen
         name="index"
         options={{
-          drawerLabel: 'Home',
-          title: 'Overview',
+          title: "Accounts",
+          headerTitleAlign: "center",
+          headerLeft: () => {
+            return (
+              <Ionicons
+                name="menu"
+                size={24}
+                onPress={() => {
+                  nav.dispatch(DrawerActions.openDrawer());
+                }}
+              />
+            );
+          },
         }}
       />
-    </Drawer>
+    </Stack>
   );
-}
+};
+
+export default StacksLayout;

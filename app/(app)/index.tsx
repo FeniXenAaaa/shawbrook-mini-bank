@@ -1,8 +1,16 @@
+import { useRouter } from "expo-router";
+import {
+  TouchableOpacity,
+  Text,
+  View,
+  FlatList,
+  StyleSheet,
+} from "react-native";
 import React, { useEffect, useState } from "react";
-import { Text, View, FlatList, StyleSheet } from "react-native";
 import ShawbrookModuleNetworking from "@/modules/@shawbrook/module-networking";
 
 export default function Index() {
+  const router = useRouter();
   const [accounts, setAccounts] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
 
@@ -10,20 +18,16 @@ export default function Index() {
     const fetchAccounts = async () => {
       try {
         const data = await ShawbrookModuleNetworking.getAccounts();
-
-        //TODO: Verify data correctness (Zod)
+        // TODO: Validate with Zod or a type guard before using
         setAccounts(data);
       } catch (err: any) {
         if (err.message?.includes("Session expired")) {
-          console.log("Session expired, reinitializing authentication...");
           setError("Session expired. Please sign in again.");
         } else {
-          console.error("Unexpected error:", err);
           setError("Failed to load accounts.");
         }
       }
     };
-
     fetchAccounts();
   }, []);
 
@@ -45,16 +49,28 @@ export default function Index() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Your Accounts</Text>
       <FlatList
         data={accounts}
         keyExtractor={(item) => item.number}
         renderItem={({ item }) => (
-          <View style={styles.card}>
-            <Text style={styles.name}>{item.name}</Text>
-            <Text style={styles.number}>Account No: {item.number}</Text>
-            <Text style={styles.balance}>Balance: £{item.balance}</Text>
-          </View>
+          <TouchableOpacity
+            style={styles.card}
+            onPress={() =>
+              router.push({
+                pathname: "/(app)/account/[id]",
+                params: { id: item.number },
+              })
+            }
+          >
+            <View style={styles.cardContent}>
+              <View>
+                <Text style={styles.name}>{item.name}</Text>
+                <Text style={styles.number}>Account No: {item.number}</Text>
+                <Text style={styles.balance}>Balance: £{item.balance}</Text>
+              </View>
+              <Text style={styles.arrow}>›</Text>
+            </View>
+          </TouchableOpacity>
         )}
         contentContainerStyle={{ paddingBottom: 20 }}
       />
@@ -67,11 +83,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     padding: 20,
-  },
-  center: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
   },
   header: {
     fontSize: 22,
@@ -87,6 +98,11 @@ const styles = StyleSheet.create({
     borderLeftWidth: 4,
     borderLeftColor: "#e10a93",
   },
+  cardContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
   name: {
     fontSize: 18,
     fontWeight: "600",
@@ -99,6 +115,16 @@ const styles = StyleSheet.create({
   balance: {
     fontWeight: "bold",
     color: "#333",
+  },
+  arrow: {
+    fontSize: 24,
+    color: "#e10a93",
+    marginLeft: 10,
+  },
+  center: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   errorText: {
     color: "red",
