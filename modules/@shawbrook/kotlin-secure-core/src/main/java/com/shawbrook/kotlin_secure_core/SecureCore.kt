@@ -7,12 +7,9 @@ enum class AuthState {
 }
 
 class SecureCore {
-
-    // Simple in-memory auth state
     @Volatile
     private var authState: AuthState = AuthState.NONE
 
-    // Set authentication state manually
     fun setAuthentication(state: String) {
         authState = when (state.lowercase()) {
             "authenticated" -> AuthState.AUTHENTICATED
@@ -21,7 +18,6 @@ class SecureCore {
         }
     }
 
-    // Return current authentication state
     fun getAuthenticationState(): AuthState {
         return authState
     }

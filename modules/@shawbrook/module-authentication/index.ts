@@ -12,5 +12,9 @@ export function authenticate() {
 }
 
 export function getAuthenticationState() {
-  return AuthenticationModule.isAuthenticated;
+  return AuthenticationModule.getAuthenticationState();
+}
+
+export function signOut() {
+  return AuthenticationModule.signOut();
 }
