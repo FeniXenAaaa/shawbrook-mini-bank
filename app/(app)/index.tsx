@@ -1,9 +1,111 @@
-import { Text, View } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { Text, View, FlatList, StyleSheet } from "react-native";
+import ShawbrookModuleNetworking from "@/modules/@shawbrook/module-networking";
 
 export default function Index() {
+  const [accounts, setAccounts] = useState<any[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchAccounts = async () => {
+      try {
+        const data = await ShawbrookModuleNetworking.getAccounts();
+
+        //TODO: Verify data correctness (Zod)
+        setAccounts(data);
+      } catch (err: any) {
+        if (err.message?.includes("Session expired")) {
+          console.log("Session expired, reinitializing authentication...");
+          setError("Session expired. Please sign in again.");
+        } else {
+          console.error("Unexpected error:", err);
+          setError("Failed to load accounts.");
+        }
+      }
+    };
+
+    fetchAccounts();
+  }, []);
+
+  if (error) {
+    return (
+      <View style={styles.center}>
+        <Text style={styles.errorText}>{error}</Text>
+      </View>
+    );
+  }
+
+  if (accounts.length === 0) {
+    return (
+      <View style={styles.center}>
+        <Text style={styles.loadingText}>Loading accounts...</Text>
+      </View>
+    );
+  }
+
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Signed in</Text>
+    <View style={styles.container}>
+      <Text style={styles.header}>Your Accounts</Text>
+      <FlatList
+        data={accounts}
+        keyExtractor={(item) => item.number}
+        renderItem={({ item }) => (
+          <View style={styles.card}>
+            <Text style={styles.name}>{item.name}</Text>
+            <Text style={styles.number}>Account No: {item.number}</Text>
+            <Text style={styles.balance}>Balance: £{item.balance}</Text>
+          </View>
+        )}
+        contentContainerStyle={{ paddingBottom: 20 }}
+      />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    padding: 20,
+  },
+  center: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  header: {
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#e10a93",
+    marginBottom: 20,
+  },
+  card: {
+    backgroundColor: "#f8f8f8",
+    padding: 16,
+    borderRadius: 10,
+    marginBottom: 12,
+    borderLeftWidth: 4,
+    borderLeftColor: "#e10a93",
+  },
+  name: {
+    fontSize: 18,
+    fontWeight: "600",
+    marginBottom: 4,
+  },
+  number: {
+    color: "#555",
+    marginBottom: 6,
+  },
+  balance: {
+    fontWeight: "bold",
+    color: "#333",
+  },
+  errorText: {
+    color: "red",
+    fontSize: 16,
+  },
+  loadingText: {
+    color: "#888",
+    fontSize: 16,
+  },
+});

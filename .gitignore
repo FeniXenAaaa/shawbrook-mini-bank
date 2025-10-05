@@ -43,5 +43,6 @@ app-example
 /android
 modules/@shawbrook/kotlin-secure-core/build/*
 modules/@shawbrook/module-authentication/android/build/*
+modules/@shawbrook/module-networking/android/build/*
 .idea
 
