@@ -57,3 +57,8 @@ HLD:
 LLD:
 
 ![LLD](https://res.cloudinary.com/dst53uohh/image/upload/v1759701193/lld.drawio_pdy7v3.png "LLD")
+
+## Video
+
+(Biometrics can't be screen recorded, 31-42 seconds)
+[Watch the demo video](https://res.cloudinary.com/dst53uohh/video/upload/v1759702829/video_2025-10-06_00-17-58_lderbt.mp4)
