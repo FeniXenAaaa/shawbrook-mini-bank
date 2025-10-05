@@ -1,9 +1,17 @@
 package expo.modules.shawbrookmodulenetworking
 
+import android.content.Context
+import android.util.Log
 import com.shawbrook.kotlin.secure.core.SecureCore
 import com.shawbrook.kotlin.secure.core.AuthState
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
+import kotlinx.coroutines.runBlocking
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import org.json.JSONObject
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -16,53 +24,86 @@ data class ShawbrookAccount(
 class SessionExpiredException(message: String) : Exception(message)
 
 class ShawbrookModuleNetworkingModule : Module(), KoinComponent {
+
+    private val context: Context
+        get() = requireNotNull(appContext.reactContext) { "React context is null" }
+
     private val secureCore: SecureCore by inject()
+    private val chatHistory = mutableListOf<String>()
+    private val client = OkHttpClient()
+
+    private val chatFunctionUrl = "https://chatwithai-d7v7lwz7oa-uc.a.run.app"
 
     override fun definition() = ModuleDefinition {
         Name("ShawbrookModuleNetworking")
 
         AsyncFunction("getAccounts") {
             ensureAuthenticated()
-            getMockAccounts().map { account ->
-                mapOf(
-                    "name" to account.name,
-                    "number" to account.number,
-                    "balance" to account.balance
-                )
-            }
+            getMockAccounts().map { it.toMap() }
         }
 
         AsyncFunction("getAccount") { id: String ->
             ensureAuthenticated()
             val account = getMockAccounts().find { it.number == id }
                 ?: throw Exception("Account not found: $id")
-            mapOf(
-                "name" to account.name,
-                "number" to account.number,
-                "balance" to account.balance
-            )
+            account.toMap()
         }
 
         AsyncFunction("sendChatMessage") { message: String ->
             ensureAuthenticated()
             if (message.isBlank()) throw Exception("Message cannot be empty")
 
-            "AI: Mock response to \"$message\""
+            chatHistory.add("You: $message")
 
-/*            try {
-                val result = functions
-                    .getHttpsCallable("chatWithAI")
-                    .call(mapOf("message" to message))
-                    .await()
-
-                val data = result.data as? Map<*, *>
-                val reply = data?.get("reply") as? String
-                reply ?: throw Exception("No reply from AI")
+            val reply = try {
+                val aiReply = runBlocking {
+                    callChatWithAI(message)
+                }
+                chatHistory.add("AI: $aiReply")
+                aiReply
             } catch (e: Exception) {
-                throw Exception("Failed to get AI response: ${e.message}", e)
-            }*/
+                Log.e("ShawbrookNetworking", "Failed to call chatWithAI", e)
+                val errorReply = "AI: Error fetching response"
+                chatHistory.add(errorReply)
+                errorReply
+            }
+
+            reply
+        }
+
+        AsyncFunction("getChatHistory") {
+            chatHistory.toList()
         }
     }
+
+    private fun callChatWithAI(message: String): String {
+        val json = JSONObject().apply {
+            put("data", message)
+        }
+
+        val body = RequestBody.create(
+            "application/json".toMediaTypeOrNull(),
+            json.toString()
+        )
+
+        val request = Request.Builder()
+            .url(chatFunctionUrl)
+            .post(body)
+            .build()
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) {
+                throw Exception("Unexpected response code: ${response.code}")
+            }
+
+            val responseBody = response.body?.string().orEmpty()
+            Log.i("ShawbrookNetworking", "Response: $responseBody")
+
+            val data = JSONObject(responseBody)
+            return data.optString("result", "No reply from AI")
+        }
+    }
+
 
     private fun ensureAuthenticated() {
         val state = secureCore.getAuthenticationState()
@@ -70,6 +111,7 @@ class ShawbrookModuleNetworkingModule : Module(), KoinComponent {
             throw SessionExpiredException("Session expired or not authenticated")
         }
     }
+
 
     private fun getMockAccounts(): List<ShawbrookAccount> {
         return listOf(
@@ -87,4 +129,3 @@ class ShawbrookModuleNetworkingModule : Module(), KoinComponent {
         )
     }
 }
-

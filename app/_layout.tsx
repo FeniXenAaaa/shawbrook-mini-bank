@@ -8,8 +8,10 @@ import { DrawerContentScrollView } from '@react-navigation/drawer';
 import { Button, View } from 'react-native';
 import AuthenticationModule from '@/modules/@shawbrook/module-authentication/src/AuthenticationModule';
 
+
 SplashScreen.preventAutoHideAsync();
 store.dispatch(startAppInit());
+
 
 export default function Root() {
   return (

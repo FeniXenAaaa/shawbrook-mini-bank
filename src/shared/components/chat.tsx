@@ -40,6 +40,18 @@ export default function Chat() {
   };
 
   useEffect(() => {
+    const loadHistory = async () => {
+      try {
+        const history = await ShawbrookModuleNetworking.getChatHistory();
+        setMessages(history);
+      } catch (error) {
+        console.error("Failed to load chat history:", error);
+      }
+    };
+    loadHistory();
+  }, []);
+
+  useEffect(() => {
     scrollRef.current?.scrollToEnd({ animated: true });
   }, [messages, loading]);
 

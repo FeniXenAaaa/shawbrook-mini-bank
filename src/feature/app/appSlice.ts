@@ -17,7 +17,6 @@ export const startAppInit = createAsyncThunk(
       //TODO: Get pre-load non-sensitive data
       //eg.: home page promotions, user settings, etc.
 
-
       dispatch(setAppInitState("success"));
     } catch (e) {
       console.error("App init error. ", e);
