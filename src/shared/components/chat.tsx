@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import ShawbrookModuleNetworking from "@/modules/@shawbrook/module-networking";
 import { useTheme } from "@react-navigation/native";
@@ -64,7 +65,9 @@ export default function Chat() {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={Platform.OS === "ios" ? 50 : 0}
       >
-        <View style={[styles.modal, { backgroundColor: colors.background }]}>
+        <SafeAreaView
+          style={[styles.modal, { backgroundColor: colors.background }]}
+        >
           <Pressable onPress={() => router.back()} style={styles.closeButton}>
             <Text style={[styles.closeText, { color: colors.text }]}>✕</Text>
           </Pressable>
@@ -74,7 +77,8 @@ export default function Chat() {
           <ScrollView
             style={styles.messages}
             ref={scrollRef}
-            contentContainerStyle={styles.messagesContainer}
+            contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
+            keyboardShouldPersistTaps="handled"
           >
             {messages.map((msg, i) => (
               <Text key={i} style={[styles.message, { color: colors.text }]}>
@@ -117,7 +121,7 @@ export default function Chat() {
               <Text style={styles.sendText}>Send</Text>
             </Pressable>
           </View>
-        </View>
+        </SafeAreaView>
       </KeyboardAvoidingView>
     </Modal>
   );
@@ -160,6 +164,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderTopWidth: 1,
     paddingVertical: 8,
+    paddingBottom: Platform.OS === "android" ? 16 : 8,
   },
   input: {
     flex: 1,

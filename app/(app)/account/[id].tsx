@@ -1,13 +1,15 @@
 import { useLocalSearchParams } from "expo-router";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, useColorScheme } from "react-native";
 import React, { useEffect, useState } from "react";
 import ShawbrookModuleNetworking from "@/modules/@shawbrook/module-networking";
 import ChatFloatingButton from "@/src/shared/components/chat-floating-button";
+import { useTheme } from "@react-navigation/native";
 
 export default function AccountDetails() {
   const { id } = useLocalSearchParams();
   const [account, setAccount] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
+  const { colors } = useTheme();
 
   useEffect(() => {
     const fetchAccount = async () => {
@@ -42,7 +44,7 @@ export default function AccountDetails() {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.card}>
         <Text style={styles.label}>Name:</Text>
         <Text style={styles.value}>{account.name}</Text>
@@ -62,7 +64,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#fff",
   },
   header: {
     fontSize: 22,
