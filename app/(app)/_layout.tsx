@@ -25,6 +25,14 @@ const StacksLayout = () => {
           },
         }}
       />
+      <Stack.Screen
+        name="ai-chat"
+        options={{
+          presentation: 'modal',
+          headerShown: true,
+          title: "AI Chat",
+        }}
+      />
     </Stack>
   );
 };

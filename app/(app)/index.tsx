@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import ShawbrookModuleNetworking from "@/modules/@shawbrook/module-networking";
+import ChatFloatingButton from '@/src/shared/components/chat-floating-button';
 
 export default function Index() {
   const router = useRouter();
@@ -74,6 +75,7 @@ export default function Index() {
         )}
         contentContainerStyle={{ paddingBottom: 20 }}
       />
+      <ChatFloatingButton  />
     </View>
   );
 }
